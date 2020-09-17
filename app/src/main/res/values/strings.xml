@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Bottom Navigation</string>
+    <string name="item_1">Home</string>
+    <string name="item_2">Browse</string>
+    <string name="item_3">Stations</string>
+	<string name="item_4">Search</string>
+	<string name="item_5">Library</string>
+</resources>
