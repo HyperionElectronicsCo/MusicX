@@ -1,4 +1,4 @@
-package com.truiton.bottomnavigation;
+package com.hyperion.musicx;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

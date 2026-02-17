@@ -1,4 +1,4 @@
-package com.truiton.bottomnavigation;
+package com.hyperion.musicx;
 
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;

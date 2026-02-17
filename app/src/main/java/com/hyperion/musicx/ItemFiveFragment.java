@@ -1,4 +1,4 @@
-package com.truiton.bottomnavigation;
+package com.hyperion.musicx;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -12,6 +12,8 @@ import android.widget.Toast;
 import android.widget.ListView;
 import android.annotation.Nullable;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
+import android.graphics.Color;
 
 
 public class ItemFiveFragment extends ListFragment implements View.OnClickListener {
@@ -25,10 +27,30 @@ public class ItemFiveFragment extends ListFragment implements View.OnClickListen
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        String[] values = new String[] { "All Songs", "Downloads", "Playlists", "Favourites", "Recently Played", "Messages", "Settings", "Feedback", "Check for updates", "About"  };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                                                                android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        String[] values = new String[] { "All Songs", "Downloads", "Playlists", "Favourites", "Recently Played", "Messages", "Settings", "Feedback", "Check for updates", "About" };
+
+// Create an anonymous subclass of ArrayAdapter
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), 
+																android.R.layout.simple_list_item_1, values) {
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				// Use super.getView to get the default View for simple_list_item_1
+				View view = super.getView(position, convertView, parent);
+
+				// simple_list_item_1 is just a TextView, so we cast it
+				TextView text = (TextView) view.findViewById(android.R.id.text1);
+
+				// Set your desired colour (e.g., BLUE, RED, or a Hex code)
+				text.setTextColor(Color.WHITE); 
+
+				return view;
+			}
+		};
+
+		setListAdapter(adapter);
+		
+		
     }
     @Override
     public View onCreateView(LayoutInflater inflater, 

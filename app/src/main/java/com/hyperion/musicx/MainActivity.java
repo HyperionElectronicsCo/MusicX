@@ -1,4 +1,4 @@
-package com.truiton.bottomnavigation;
+package com.hyperion.musicx;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,12 +8,29 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
+import android.support.v4.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		// Source - https://stackoverflow.com/a/22192691
+// Posted by codercat, modified by community. See post 'Timeline' for change history
+// Retrieved 2026-02-16, License - CC BY-SA 4.0
+
+		Window window = this.getWindow();
+
+// clear FLAG_TRANSLUCENT_STATUS flag:
+		window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+		window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+// finally change the color
+		window.setStatusBarColor(ContextCompat.getColor(this,R.color.mainbg));
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getSupportActionBar().hide();
         setContentView(R.layout.activity_main);

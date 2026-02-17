@@ -2,7 +2,8 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context="com.truiton.bottomnavigation.ItemFourFragment">
+	android:background="@color/mainbg"
+	tools:context="com.truiton.musicx.ItemFourFragment">
 
     <ImageView
         android:id="@+id/truiton_image"

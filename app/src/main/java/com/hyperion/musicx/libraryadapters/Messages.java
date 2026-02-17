@@ -1,4 +1,4 @@
-package com.truiton.bottomnavigation.libraryadapters;
+package com.hyperion.musicx.libraryadapters;
 
 public class Messages {
     
