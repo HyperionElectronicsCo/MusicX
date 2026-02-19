@@ -272,6 +272,66 @@
 
 			</RelativeLayout>
 
+			<android.support.v7.widget.SwitchCompat
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Sync to cloud"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/cloudsyncText"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingLeft="12dp"
+				android:paddingBottom="12dp"/>
+			
+			<android.support.v7.widget.SwitchCompat
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Content restrictions"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/restrictionsText"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingLeft="12dp"
+				android:paddingBottom="12dp"/>
+			
+			<RelativeLayout
+				android:id="@+id/row_cache"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Clear cache"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="&#187;"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+			
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -282,16 +342,77 @@
 				android:paddingLeft="10dp"
 				android:paddingBottom="8dp"/>
 
-			<TextView
-				android:id="@+id/btn_about"
+			<RelativeLayout
+				android:id="@+id/row_extras"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="About"
-				android:textColor="#FFFFFF"
 				android:padding="12dp"
 				android:clickable="true"
 				android:focusable="true"
-				android:background="?attr/selectableItemBackground"/>
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="More settings"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="&#187;"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+			
+			<RelativeLayout
+				android:id="@+id/row_updates"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Check for updates"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="&#187;"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+			
+			<RelativeLayout
+				android:id="@+id/row_about"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="About"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="&#187;"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
 
 		</LinearLayout>
 

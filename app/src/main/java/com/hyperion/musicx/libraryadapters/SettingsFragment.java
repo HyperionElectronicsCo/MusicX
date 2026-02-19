@@ -41,10 +41,32 @@ public class SettingsFragment extends Fragment {
 					Toast.makeText(getActivity(), "Opening Quality Settings", Toast.LENGTH_SHORT).show();
 				}
 			});
-
-        // 3. Initialize Buttons
-        TextView aboutBtn = (TextView) view.findViewById(R.id.btn_about);
-        aboutBtn.setOnClickListener(new View.OnClickListener() {
+			
+			
+			
+		RelativeLayout cacheRow = (RelativeLayout) view.findViewById(R.id.row_cache);
+        cacheRow.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(getActivity(), "Clear cache", Toast.LENGTH_SHORT).show();
+				}
+			});
+		RelativeLayout extrasRow = (RelativeLayout) view.findViewById(R.id.row_extras);
+        extrasRow.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(getActivity(), "More settings", Toast.LENGTH_SHORT).show();
+				}
+			});
+        RelativeLayout updatesRow = (RelativeLayout) view.findViewById(R.id.row_updates);
+        updatesRow.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(getActivity(), "Checking for updates", Toast.LENGTH_SHORT).show();
+				}
+			});
+        RelativeLayout aboutRow = (RelativeLayout) view.findViewById(R.id.row_about);
+        aboutRow.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Toast.makeText(getActivity(), "Opening About", Toast.LENGTH_SHORT).show();
