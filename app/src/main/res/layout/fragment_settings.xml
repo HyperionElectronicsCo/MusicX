@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/mainbg"
+	tools:context="com.hyperion.musicx.SettingsFragment"
+	android:id="@+id/settingsFrag">
+
+	<android.support.v4.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="16dp">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="NETWORK"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingBottom="8dp"
+				android:paddingLeft="10dp"/>
+
+			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_stream_mobile"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Stream using mobile data"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_download_mobile"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Download using mobile data"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="PLAYBACK &amp; DOWNLOADING"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingTop="24dp"
+				android:paddingLeft="10dp"
+				android:paddingBottom="8dp"/>
+
+			<RelativeLayout
+				android:id="@+id/row_online_quality"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Online playback quality"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="Standard"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+
+			<RelativeLayout
+				android:id="@+id/row_download_quality"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Download quality"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="Standard"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+
+			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_animations"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Animations"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/animText"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingLeft="12dp"
+				android:paddingBottom="12dp"/>
+
+			<RelativeLayout
+				android:id="@+id/row_timer"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Timer"
+					android:textColor="#FFFFFF"
+					android:id="@+id/fragmentsettingsTextView1"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="Off"
+					android:textColor="#808080"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/fragmentsettingsTextView1"
+					android:text="@string/timerText"
+					android:textColor="#808080"
+					android:textSize="12sp"
+					android:paddingTop="12dp"/>
+
+			</RelativeLayout>
+
+			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_simplayback"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/playbackheaderText"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="CONNECTIONS"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingBottom="8dp"
+				android:paddingLeft="10dp"/>
+
+			<android.support.v7.widget.SwitchCompat
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Smart playback on Bluetooth device"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<android.support.v7.widget.SwitchCompat
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Control playback with wired earphones"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/playbackText"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingLeft="12dp"
+				android:paddingBottom="12dp"/>
+
+			<android.support.v7.widget.SwitchCompat
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Show lyrics in car"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				app:trackTint="@xml/switch_track_selector"
+				app:thumbTint="#FFFFFF"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="SYSTEM SETTINGS"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingTop="24dp"
+				android:paddingLeft="10dp"
+				android:paddingBottom="8dp"/>
+
+			<RelativeLayout
+				android:id="@+id/row_filter"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Filter"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="&#187;"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+
+			<RelativeLayout
+				android:id="@+id/row_notifications"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Notifications"
+					android:textColor="#FFFFFF"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:text="&#187;"
+					android:textColor="#808080"/>
+
+			</RelativeLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="MORE SETTINGS"
+				android:textColor="#808080"
+				android:textSize="12sp"
+				android:paddingTop="24dp"
+				android:paddingLeft="10dp"
+				android:paddingBottom="8dp"/>
+
+			<TextView
+				android:id="@+id/btn_about"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="About"
+				android:textColor="#FFFFFF"
+				android:padding="12dp"
+				android:clickable="true"
+				android:focusable="true"
+				android:background="?attr/selectableItemBackground"/>
+
+		</LinearLayout>
+
+	</android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>
+

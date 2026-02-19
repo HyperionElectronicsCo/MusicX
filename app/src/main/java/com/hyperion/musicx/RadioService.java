@@ -9,18 +9,19 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import java.io.IOException;
 
 public class RadioService extends Service {
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
-    private boolean isBuffering = false; // New state tracker
+    private boolean isBuffering = false; 
     private String currentName = "Radio";
 
     private static final String CHANNEL_ID = "RadioPlaybackChannel";
     public static final String ACTION_STOP = "com.hyperion.musicx.STOP";
     public static final String ACTION_PLAY_PAUSE = "com.hyperion.musicx.PLAY_PAUSE";
+    public static final String ACTION_NEXT = "com.hyperion.musicx.NEXT";
+    public static final String ACTION_PREVIOUS = "com.hyperion.musicx.PREVIOUS";
 
     @Override
     public void onCreate() {
@@ -37,6 +38,12 @@ public class RadioService extends Service {
                 return START_NOT_STICKY;
             } else if (action.equals(ACTION_PLAY_PAUSE)) {
                 togglePlayback();
+                return START_NOT_STICKY;
+            } else if (action.equals(ACTION_NEXT)) {
+                sendBroadcast(new Intent("ACTION_NEXT"));
+                return START_NOT_STICKY;
+            } else if (action.equals(ACTION_PREVIOUS)) {
+                sendBroadcast(new Intent("ACTION_PREV"));
                 return START_NOT_STICKY;
             }
         }
@@ -56,25 +63,24 @@ public class RadioService extends Service {
         if (mediaPlayer != null) {
             mediaPlayer.release();
         }
-
-        isBuffering = true; // Start buffering
+        isBuffering = true;
         isPlaying = false;
-
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
 
-            // Show notification immediately with "Buffering..." text
+            // Initial notification show
             startForeground(101, buildNotification(currentName));
 
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 					@Override
 					public void onPrepared(MediaPlayer mp) {
-						isBuffering = false; // Done buffering
+						isBuffering = false;
 						isPlaying = true;
 						mp.start();
-						updateNotification();
+						// Keep in foreground while playing
+						startForeground(101, buildNotification(currentName));
 					}
 				});
 
@@ -94,17 +100,23 @@ public class RadioService extends Service {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
                 isPlaying = false;
+                // CRITICAL: Stop foreground to allow swipe-to-dismiss when paused
+                stopForeground(false);
+                updateNotification();
             } else {
                 mediaPlayer.start();
                 isPlaying = true;
+                // Return to foreground to prevent service death
+                startForeground(101, buildNotification(currentName));
             }
-            updateNotification();
         }
     }
 
     private void stopPlayback() {
         if (mediaPlayer != null) {
-            mediaPlayer.stop();
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
             mediaPlayer.release();
             mediaPlayer = null;
         }
@@ -125,40 +137,41 @@ public class RadioService extends Service {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        Intent playPauseIntent = new Intent(this, RadioService.class);
-        playPauseIntent.setAction(ACTION_PLAY_PAUSE);
-        PendingIntent playPausePendingIntent = PendingIntent.getService(this, 1, playPauseIntent, 0);
+        // Standard Intents
+        PendingIntent prevPI = PendingIntent.getService(this, 3, new Intent(this, RadioService.class).setAction(ACTION_PREVIOUS), 0);
+        PendingIntent playPI = PendingIntent.getService(this, 1, new Intent(this, RadioService.class).setAction(ACTION_PLAY_PAUSE), 0);
+        PendingIntent nextPI = PendingIntent.getService(this, 4, new Intent(this, RadioService.class).setAction(ACTION_NEXT), 0);
+        PendingIntent stopPI = PendingIntent.getService(this, 2, new Intent(this, RadioService.class).setAction(ACTION_STOP), 0);
 
-        Intent stopIntent = new Intent(this, RadioService.class);
-        stopIntent.setAction(ACTION_STOP);
-        PendingIntent stopPendingIntent = PendingIntent.getService(this, 2, stopIntent, 0);
+        // SWIPE INTENT: This fires ACTION_STOP when user clears the notification
+        PendingIntent deletePI = PendingIntent.getService(this, 5, new Intent(this, RadioService.class).setAction(ACTION_STOP), 0);
 
-        // Logic for Dynamic Text and Icons
         String contentText = isBuffering ? "Buffering..." : name;
-        int playPauseIcon;
-        String playPauseLabel;
+        int playPauseIcon = isBuffering ? android.R.drawable.ic_menu_rotate : 
+            (isPlaying ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play);
 
-        if (isBuffering) {
-            playPauseIcon = android.R.drawable.ic_menu_rotate; // "Loading" look
-            playPauseLabel = "WAIT";
-        } else {
-            playPauseIcon = isPlaying ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play;
-            playPauseLabel = isPlaying ? "PAUSE" : "PLAY";
-        }
+        android.support.v4.app.NotificationCompat.Builder builder = 
+            new android.support.v4.app.NotificationCompat.Builder(this);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle("Radio Player")
-			.setContentText(contentText)
-			.setSmallIcon(android.R.drawable.ic_media_play)
-			.setContentIntent(pendingIntent)
-			.setPriority(NotificationCompat.PRIORITY_LOW)
-			.setOngoing(true)
-			.addAction(playPauseIcon, playPauseLabel, playPausePendingIntent)
-			.addAction(android.R.drawable.ic_menu_close_clear_cancel, "STOP", stopPendingIntent);
+            .setContentText(contentText)
+            .setSmallIcon(android.R.drawable.ic_media_play)
+            .setContentIntent(pendingIntent)
+            .setDeleteIntent(deletePI) // <--- Handles the swipe
+            .setOngoing(isPlaying)      // True = Cannot swipe | False = Swipable
+            .addAction(android.R.drawable.ic_media_previous, "PREV", prevPI)
+            .addAction(playPauseIcon, isPlaying ? "PAUSE" : "PLAY", playPI)
+            .addAction(android.R.drawable.ic_media_next, "NEXT", nextPI)
+            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "STOP", stopPI);
+
+        android.support.v7.app.NotificationCompat.MediaStyle style = 
+            new android.support.v7.app.NotificationCompat.MediaStyle();
+
+        builder.setStyle(style.setShowActionsInCompactView(0, 1, 2));
 
         Notification notification = builder.build();
 
-        // Reflection hack for Channel ID on Android O+
+        // Android O+ Channel compatibility
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 java.lang.reflect.Field field = notification.getClass().getDeclaredField("mChannelId");
@@ -181,13 +194,7 @@ public class RadioService extends Service {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        stopPlayback();
-        super.onDestroy();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) { return null; }
+    @Override public void onDestroy() { stopPlayback(); super.onDestroy(); }
+    @Override public IBinder onBind(Intent intent) { return null; }
 }
 

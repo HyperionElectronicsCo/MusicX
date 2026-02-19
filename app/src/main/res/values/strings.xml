@@ -8,4 +8,13 @@
 	
 	<string name="mostPlayed"><u>Most Played \nWorldwide</u></string>
 	
+	<string name="playbackheaderText">Simultaneous playback \nwith other apps</string>
+	
+	<string name="animText">Add animation effects \nwhile playing music.</string>
+	<string name="timerText">Turn off the music \nwhen the timer ends.</string>
+	<string name="playbackText">When disabled, earphone controls \n(including voice commands) will be \nunavailable.</string>
+	<string name="cloudsyncText">Automatically sync local songs \nwhen connected to internet.</string>
+	<string name="restrictionsText">Explicot songs wont \nbe able to be played.</string>
+	
+	
 </resources>
