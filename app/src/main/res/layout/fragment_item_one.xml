@@ -103,6 +103,8 @@
 
 		<ProgressBar
 			android:id="@+id/progressBar"
+			android:indeterminateTint="#87CEEB"
+			android:indeterminateTintMode="src_in"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerInParent="true"/>
