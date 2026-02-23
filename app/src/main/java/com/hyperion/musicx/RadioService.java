@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import java.io.IOException;
+import android.support.v7.app.NotificationCompat.MediaStyle;
 
 public class RadioService extends Service {
     private MediaPlayer mediaPlayer;
@@ -164,10 +165,13 @@ public class RadioService extends Service {
             .addAction(android.R.drawable.ic_media_next, "NEXT", nextPI)
             .addAction(android.R.drawable.ic_menu_close_clear_cancel, "STOP", stopPI);
 
-        android.support.v7.app.NotificationCompat.MediaStyle style = 
-            new android.support.v7.app.NotificationCompat.MediaStyle();
+        // Correct path for SDK 25 / Support Library 25+
+		android.support.v7.app.NotificationCompat.MediaStyle style = 
+			new android.support.v7.app.NotificationCompat.MediaStyle();
 
-        builder.setStyle(style.setShowActionsInCompactView(0, 1, 2));
+		style.setShowActionsInCompactView(0, 1, 2);
+
+		builder.setStyle(style);
 
         Notification notification = builder.build();
 
