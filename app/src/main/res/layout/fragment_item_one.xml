@@ -121,12 +121,12 @@
 		android:id="@+id/settingsTop"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:background="@drawable/circle_button"
-		android:src="@drawable/ic_settings"
+		android:src="@drawable/ic_hamburger_menu"
 		android:scaleType="centerInside"
 		android:adjustViewBounds="false"
 		android:layout_alignParentRight="true"
-		android:layout_margin="10dp"/>
+		android:layout_margin="20dp"
+		android:background="@null"/>
 
 </RelativeLayout>
 

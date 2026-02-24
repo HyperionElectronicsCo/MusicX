@@ -16,7 +16,7 @@ public class ItemTwoFragment extends Fragment {
     private WebView mWebView;
 
     // Using a simplified mobile embed URL to avoid complex API handshakes
-    private final String EMBED_URL = "https://soundcloud.com";
+    private final String EMBED_URL = "https://everynoise.com/#updates";
 
     public static ItemTwoFragment newInstance() {
         return new ItemTwoFragment();
@@ -36,7 +36,7 @@ public class ItemTwoFragment extends Fragment {
         setupWebView();
 
         // Step 1: Clear all previous data to prevent SoundCloud from flagging a "stuck" session
-        mWebView.clearCache(true);
+        mWebView.clearCache(false);
         mWebView.clearHistory();
         CookieManager.getInstance().removeAllCookies(null);
         CookieManager.getInstance().flush();

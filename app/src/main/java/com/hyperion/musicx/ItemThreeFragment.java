@@ -151,7 +151,6 @@ public class ItemThreeFragment extends Fragment {
         // Updated with 24-7 stations
 		stations.add(new RadioStation("24-7 The Power of Love", "24-7 / The Power of Love", "http://antares.dribbcast.com:4468/stream/1/"));
 		stations.add(new RadioStation("24-7 Serenity", "24-7 / Serenity", "http://antares.dribbcast.com:4352/stream/1/"));
-		stations.add(new RadioStation("24-7 Soul", "24-7 / Soul", "http://antares.dribbcast.com:4456/stream/1/"));
 		stations.add(new RadioStation("24-7 60s", "24-7 / 60s", "http://antares.dribbcast.com:4361/stream/1/"));
 		stations.add(new RadioStation("24-7 70s", "24-7 / 70s", "http://antares.dribbcast.com:4418/stream/1/"));
 		stations.add(new RadioStation("24-7 80's", "24-7 / 80s", "http://antares.dribbcast.com:4424/stream/1/"));

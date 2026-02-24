@@ -16,6 +16,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParser;
+import android.widget.ImageButton;
+import com.hyperion.musicx.libraryadapters.SettingsFragment;
 
 public class ItemOneFragment extends Fragment {
     private ProgressBar progressBar;
@@ -31,6 +33,22 @@ public class ItemOneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_one, container, false);
 
+		// 1. Find the ImageButton by ID
+    ImageButton settingsBtn = (ImageButton) view.findViewById(R.id.settingsTop);
+
+    // 2. Set the click listener
+    settingsBtn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // 3. Perform the Fragment Transaction
+            SettingsFragment settingsFragment = new SettingsFragment();
+            getFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, settingsFragment) // replace 'fragment_container' with your actual FrameLayout ID
+                .addToBackStack(null) // Allows the user to navigate back to ItemOneFragment
+                .commit();
+        }
+    });
+		
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         rssListView = (ListView) view.findViewById(R.id.rssListView);
 

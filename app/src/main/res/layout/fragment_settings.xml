@@ -179,6 +179,7 @@
 				android:paddingLeft="10dp"/>
 
 			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_smart_play"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="Smart playback on Bluetooth device"
@@ -188,6 +189,7 @@
 				app:thumbTint="#FFFFFF"/>
 
 			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_wired_play"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="Control playback with wired earphones"
@@ -206,6 +208,7 @@
 				android:paddingBottom="12dp"/>
 
 			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_show_lyrics"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="Show lyrics in car"
@@ -273,6 +276,7 @@
 			</RelativeLayout>
 
 			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_cloud_sync"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="Sync to cloud"
@@ -291,6 +295,7 @@
 				android:paddingBottom="12dp"/>
 			
 			<android.support.v7.widget.SwitchCompat
+				android:id="@+id/switch_content_restrictions"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:text="Content restrictions"
