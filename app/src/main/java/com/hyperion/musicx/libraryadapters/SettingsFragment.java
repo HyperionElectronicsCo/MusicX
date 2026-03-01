@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.hyperion.musicx.R;
 import com.hyperion.musicx.libraryadapters.settings.About;
 import com.hyperion.musicx.libraryadapters.settings.OnlinePlaybackQuality;
+import android.widget.RadioGroup;
 
 
 public class SettingsFragment extends Fragment {
@@ -25,6 +26,10 @@ public class SettingsFragment extends Fragment {
     private static final String PREFS_NAME = "MusicXSettings";
     private static final String KEY_STREAM_MOBILE = "stream_mobile_data";
 	private static final String KEY_DOWNLOAD_MOBILE = "download_mobile_data";
+	private static final int REQ_MIC = 101;
+	private SwitchCompat animationsSwitch; // Move to class level so it's accessible everywhere
+	
+	
     private SharedPreferences prefs;
 
     public SettingsFragment() {
@@ -39,7 +44,14 @@ public class SettingsFragment extends Fragment {
         prefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         final SwitchCompat streamSwitch = (SwitchCompat) view.findViewById(R.id.switch_stream_mobile);
-        final SwitchCompat downloadSwitch = (SwitchCompat) view.findViewById(R.id.switch_download_mobile);
+      
+		final SwitchCompat downloadSwitch = (SwitchCompat) view.findViewById(R.id.switch_download_mobile);
+		// Define context from the view that was clicked
+		final Context context = this.getContext(); 
+		final SharedPreferences prefs = context.getSharedPreferences("DownloadPrefs", Context.MODE_PRIVATE);
+
+// Retrieve last saved ID, default to R.id.rb_standard since it's your default in XML
+		int savedId = prefs.getInt("selected_quality_id", R.id.rb_standard);
 		
 		
 		streamSwitch.setChecked(prefs.getBoolean(KEY_STREAM_MOBILE, false));
@@ -193,7 +205,7 @@ public class SettingsFragment extends Fragment {
 					return this;
 				}
 			});
-        RelativeLayout playbackqualityRow = (RelativeLayout) view.findViewById(R.id.row_online_quality);
+        RelativeLayout playbackqualityRow = view.findViewById(R.id.row_online_quality);
         playbackqualityRow.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -212,23 +224,19 @@ public class SettingsFragment extends Fragment {
 					try {
 						Context context = v.getContext();
 
-						// 1. Create and show the basic AlertDialog
 						final AlertDialog dialog = new AlertDialog.Builder(context).create();
 						dialog.show();
 
-						// 2. Inflate your layout
 						LayoutInflater inflater = LayoutInflater.from(context);
 						View dialogView = inflater.inflate(R.layout.custom_dialog, null);
 						dialog.setContentView(dialogView);
 
-						// Replace the window width part of your current code with this:
 						if (dialog.getWindow() != null) {
 							dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 							android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
 							lp.copyFrom(dialog.getWindow().getAttributes());
 
-							// Set width to 85% of screen width for a slimmer look
 							int width = (int)(context.getResources().getDisplayMetrics().widthPixels * 0.85);
 							lp.width = width;
 							lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
@@ -236,8 +244,6 @@ public class SettingsFragment extends Fragment {
 							dialog.getWindow().setAttributes(lp);
 						}
 						
-
-						// 4. PROGRAMMATIC RADIO BUTTON COLOR (#FF0000)
 						int red = android.graphics.Color.parseColor("#FF0000");
 						int grey = android.graphics.Color.parseColor("#757575");
 
@@ -249,18 +255,40 @@ public class SettingsFragment extends Fragment {
 							new int[]{ red, grey }
 						);
 
+						final SharedPreferences prefs = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+
+						RadioGroup qualityGroup = (RadioGroup) dialogView.findViewById(R.id.quality_group);
 						RadioButton rbSuper = (RadioButton) dialogView.findViewById(R.id.rb_super);
 						RadioButton rbHigh = (RadioButton) dialogView.findViewById(R.id.rb_high);
 						RadioButton rbStandard = (RadioButton) dialogView.findViewById(R.id.rb_standard);
 
-						// Apply the tint (Works on SDK 21+)
+						// Null/Default Logic: Retrieve saved ID, fallback to rb_standard if none saved
+						int savedId = prefs.getInt("download_quality_id", R.id.rb_standard);
+						qualityGroup.check(savedId);
+
+						qualityGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+								@Override
+								public void onCheckedChanged(RadioGroup group, int checkedId) {
+									if (checkedId != -1) {
+										prefs.edit().putInt("download_quality_id", checkedId).apply();
+
+										if (checkedId == R.id.rb_super) {
+											// TODO: Super quality logic
+										} else if (checkedId == R.id.rb_high) {
+											// TODO: High quality logic
+										} else if (checkedId == R.id.rb_standard) {
+											// TODO: Standard quality logic
+										}
+									}
+								}
+							});
+						
 						if (android.os.Build.VERSION.SDK_INT >= 21) {
 							rbSuper.setButtonTintList(colorStateList);
 							rbHigh.setButtonTintList(colorStateList);
 							rbStandard.setButtonTintList(colorStateList);
 						}
 
-						// 5. Cancel button logic
 						TextView btnCancel = (TextView) dialogView.findViewById(R.id.btn_cancel);
 						btnCancel.setOnClickListener(new View.OnClickListener() {
 								@Override
@@ -279,12 +307,35 @@ public class SettingsFragment extends Fragment {
 		
 		
         SwitchCompat animationsSwitch = (SwitchCompat) view.findViewById(R.id.switch_animations);
-        animationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+// 1. Initial State Check (Sets switch position on fragment load)
+		if (android.support.v4.content.ContextCompat.checkSelfPermission(getActivity(), 
+																		 android.Manifest.permission.RECORD_AUDIO) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+			animationsSwitch.setChecked(true);
+		} else {
+			animationsSwitch.setChecked(false);
+		}
+
+// 2. Toggle Logic
+		animationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					Toast.makeText(getActivity(), "Animations: " + isChecked, Toast.LENGTH_SHORT).show();
+					if (isChecked) {
+						if (android.support.v4.content.ContextCompat.checkSelfPermission(getActivity(), 
+																						 android.Manifest.permission.RECORD_AUDIO) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+
+							// Always try to request the standard system dialog first
+							requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, REQ_MIC);
+
+							// Revert switch until granted
+							buttonView.setChecked(false);
+						} else {
+							Toast.makeText(getActivity(), "Animations: " + isChecked, Toast.LENGTH_SHORT).show();
+						}
+					}
 				}
 			});
+		
         RelativeLayout timerRow = (RelativeLayout) view.findViewById(R.id.row_timer);
         timerRow.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -384,5 +435,92 @@ public class SettingsFragment extends Fragment {
 			
         return view;
     }
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+		if (requestCode == REQ_MIC) {
+			if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+				// CASE 1: User allowed!
+				Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+				updateSwitchState(true);
+			} else {
+				// CASE 2: User denied ("Don't allow" clicked)
+
+				// Check if they denied it PERMANENTLY (clicked twice or "Don't ask again")
+				if (!shouldShowRequestPermissionRationale(android.Manifest.permission.RECORD_AUDIO)) {
+					// This triggers the custom HUAWEI-style dialog from your image
+					showSettingsDialog();
+				} else {
+					// Just a regular single denial
+					Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
+				}
+
+				if (animationsSwitch != null) {
+					animationsSwitch.setChecked(false);
+				}
+			}
+		}
+	}
+
+	private void showSettingsDialog() {
+		final android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(getActivity()).create();
+
+		// Inflate custom view
+		android.view.LayoutInflater inflater = getActivity().getLayoutInflater();
+		android.view.View dialogView = inflater.inflate(R.layout.dialog_permission, null);
+		dialog.setView(dialogView);
+
+		// Make the system window transparent so our rounded corners show
+		if (dialog.getWindow() != null) {
+			dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+		}
+
+		// Set Up Button Logic
+		dialogView.findViewById(R.id.btn_setup).setOnClickListener(new android.view.View.OnClickListener() {
+				@Override
+				public void onClick(android.view.View v) {
+					android.content.Intent intent = new android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+					android.net.Uri uri = android.net.Uri.fromParts("package", getActivity().getPackageName(), null);
+					intent.setData(uri);
+					startActivity(intent);
+					dialog.dismiss();
+				}
+			});
+
+		// Cancel Button Logic
+		dialogView.findViewById(R.id.btn_cancel).setOnClickListener(new android.view.View.OnClickListener() {
+				@Override
+				public void onClick(android.view.View v) {
+					dialog.dismiss();
+				}
+			});
+
+		dialog.show();
+
+		// Set width to 85% of screen to match your image
+		int width = (int)(getResources().getDisplayMetrics().widthPixels * 0.85);
+		dialog.getWindow().setLayout(width, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+	}
+	
+	
+
+	private void updateSwitchState(final boolean checked) {
+		if (animationsSwitch != null) {
+			animationsSwitch.setOnCheckedChangeListener(null);
+			animationsSwitch.setChecked(checked);
+			animationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton b, boolean isChecked) {
+						// Re-attach your logic
+						if (isChecked) {
+							requestPermissions(new String[]{android.Manifest.permission.RECORD_AUDIO}, REQ_MIC);
+							animationsSwitch.setChecked(false);
+						}
+					}
+				});
+		}
+	}
+	
 }
 

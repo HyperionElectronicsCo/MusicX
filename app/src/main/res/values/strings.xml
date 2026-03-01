@@ -16,5 +16,7 @@
 	<string name="cloudsyncText">Automatically sync local songs \nwhen connected to internet.</string>
 	<string name="restrictionsText">Explicit songs won&#96;t \nbe able to be played.</string>
 	
+    <string name="opQuality">"Note: Songs that can't be played at the quality you select will automatically be played at the next available quality."</string>
+    
 	<string name="downloadqualitySubtext">1.Hi-res songs and Super-quality(HQ) \nsongs can only be downloaded by Music members. \n2.Without the required membership, \nauto-downloaded Hi-Res/SQ songs will \ndefault to a lower quality.</string>
 </resources>

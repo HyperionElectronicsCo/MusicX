@@ -10,5 +10,25 @@
 	<style name="WhiteText">
 		<item name="android:textColor">#FFFFFF</item>
 	</style>
+	<style name="CustomDialogTheme" parent="android:Theme.Material.Dialog.Alert">
+		<!-- Dark grey background like the image -->
+		<!--item name="android:colorBackground">#333333</item>-->
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowFrame">@null</item>
+		<item name="android:windowIsFloating">true</item>
+		<!-- This handles the rounded corners -->
+		<item name="android:windowBackground">@drawable/dialog_bg</item>
+	</style>
+	<style name="QualityRadioButton">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:paddingTop">12dp</item>
+		<item name="android:paddingBottom">12dp</item>
+		<item name="android:buttonTint">#FF0000</item>
+		<item name="android:textColor">#FFFFFF</item>
+		<item name="android:textSize">16sp</item>
+		<item name="android:layoutDirection">rtl</item> <!-- Moves button to the right -->
+		<item name="android:textAlignment">viewStart</item>
+	</style>
 	
 </resources>

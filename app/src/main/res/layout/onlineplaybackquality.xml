@@ -1,9 +1,637 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-</LinearLayout>
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/mainbg"
+	android:fillViewport="true">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="12dp"
+			android:text="MOBILE DATA"
+			android:textColor="#808080"
+			android:textSize="14sp"
+			android:textStyle="bold"
+			android:layout_marginTop="12dp"/>
+
+		<RadioGroup
+			android:id="@+id/rg_mobile"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_m_super"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout1">
+
+					<TextView
+						android:id="@+id/tv_m_super"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="Super"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout1"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_marginTop="2dp">
+
+					<include
+						layout="@layout/sound_sq"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout1">
+
+					<TextView
+						android:id="@+id/tv_m_supero"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="20-40 MB/song, 640 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#FF9E9E9E"/>
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_m_high"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout2">
+
+					<TextView
+						android:id="@+id/tv_m_high"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="High"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout2"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_margin="2dp">
+
+					<include
+						layout="@layout/sound_hq"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout2">
+
+					<TextView
+						android:id="@+id/tv_m_higho"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="6-11 MB/song, 320 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#FF9E9E9E"/>
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_m_std"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout3">
+
+					<TextView
+						android:id="@+id/tv_m_std"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="Standard"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout3"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_marginTop="4dp">
+
+					<include
+						layout="@layout/sound_std"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout3">
+
+					<TextView
+						android:id="@+id/tv_m_stdo"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="3-5 MB/song, 128 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#FF9E9E9E"/>
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_m_low"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout4">
+
+					<TextView
+						android:id="@+id/tv_m_low"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="Low"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout4"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_marginTop="4dp">
+
+					<include
+						layout="@layout/sound_low"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout4">
+
+					<TextView
+						android:id="@+id/tv_m_lowo"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="1-2 MB/song, 64 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+		</RadioGroup>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="12dp"
+			android:text="WI-FI"
+			android:textColor="#808080"
+			android:textSize="14sp"
+			android:textStyle="bold"
+			android:layout_marginTop="30dp"/>
+
+		<RadioGroup
+			android:id="@+id/rg_wifi"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_w_super"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout10">
+
+					<TextView
+						android:id="@+id/tv_w_super"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="Super"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout10"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_marginTop="2dp">
+
+					<include
+						layout="@layout/sound_sq"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout10">
+
+					<TextView
+						android:id="@+id/tv_w_supero"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="20-40 MB/song, 640 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#FF9E9E9E"/>
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_w_high"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout20">
+
+					<TextView
+						android:id="@+id/tv_w_high"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="High"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout20"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_margin="2dp">
+
+					<include
+						layout="@layout/sound_hq"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout20">
+
+					<TextView
+						android:id="@+id/tv_w_higho"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="6-11 MB/song, 320 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#FF9E9E9E"/>
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_w_std"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout30">
+
+					<TextView
+						android:id="@+id/tv_w_std"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="Standard"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout30"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_marginTop="4dp">
+
+					<include
+						layout="@layout/sound_std"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout30">
+
+					<TextView
+						android:id="@+id/tv_w_stdo"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="3-5 MB/song, 128 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#FF9E9E9E"/>
+
+			<RelativeLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="6dp"
+				android:paddingBottom="6dp">
+
+				<RadioButton
+					android:id="@+id/rb_w_low"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_centerVertical="true"/>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/radiobuttonlayoutLinearLayout40">
+
+					<TextView
+						android:id="@+id/tv_w_low"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="Low"
+						android:textColor="#FFFFFF"
+						android:textSize="16sp"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@id/radiobuttonlayoutLinearLayout40"
+					android:layout_marginLeft="4dp"
+					android:layout_marginRight="4dp"
+					android:layout_marginBottom="4dp"
+					android:layout_marginTop="4dp">
+
+					<include
+						layout="@layout/sound_low"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:orientation="horizontal"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@id/radiobuttonlayoutLinearLayout40">
+
+					<TextView
+						android:id="@+id/tv_w_lowo"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="1-2 MB/song, 64 kbps"
+						android:textColor="#808080"
+						android:textSize="14sp"/>
+
+				</LinearLayout>
+
+			</RelativeLayout>
+
+		</RadioGroup>
+
+		<RelativeLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="12dp"
+			android:paddingBottom="6dp">
+
+			<TextView
+				android:id="@+id/bottominfo"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentLeft="true"
+				android:layout_centerVertical="true"
+				android:text="@string/opQuality"
+				android:textColor="#808080"
+				android:textSize="16sp"/>
+
+		</RelativeLayout>
+
+	</LinearLayout>
+
+</ScrollView>
+
