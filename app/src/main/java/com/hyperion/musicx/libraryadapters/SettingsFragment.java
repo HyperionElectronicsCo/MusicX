@@ -338,11 +338,97 @@ public class SettingsFragment extends Fragment {
 		
         RelativeLayout timerRow = (RelativeLayout) view.findViewById(R.id.row_timer);
         timerRow.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(getActivity(), "Timer", Toast.LENGTH_SHORT).show();
-				}
-			});
+                @Override
+                public void onClick(View v) {
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View dialogView = inflater.inflate(R.layout.custom_dialog_timer, null);
+                    builder.setView(dialogView);
+
+                    final android.support.v7.app.AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    // --- FIX: TRUE FULL WIDTH ---
+                    if (dialog.getWindow() != null) {
+                        // 1. Remove the default system dialog background (which has margins)
+                        dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        // 2. Set width to MATCH_PARENT
+                        android.view.WindowManager.LayoutParams lp = new android.view.WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = android.view.WindowManager.LayoutParams.MATCH_PARENT;
+                        lp.height = android.view.WindowManager.LayoutParams.WRAP_CONTENT;
+                        dialog.getWindow().setAttributes(lp);
+                    }
+
+                    // --- PREFERENCES & DYNAMIC TINTING ---
+                    final SharedPreferences prefs = getActivity().getSharedPreferences("TimerPrefs", Context.MODE_PRIVATE);
+                    int savedId = prefs.getInt("selected_timer_id", R.id.none);
+
+                    // Color State List for RadioButtons
+                    int[][] states = new int[][] {
+                        new int[] { android.R.attr.state_checked },
+                        new int[] { -android.R.attr.state_checked }
+                    };
+                    int[] colors = new int[] {
+                        android.graphics.Color.parseColor("#FF0000"), // Red
+                        android.graphics.Color.parseColor("#bdbdbd")  // Grey
+                    };
+                    android.content.res.ColorStateList colorList = new android.content.res.ColorStateList(states, colors);
+
+                    RadioGroup qualityGroup = (RadioGroup) dialogView.findViewById(R.id.quality_group_timer);
+
+                    // Loop through children to apply tint and restore saved state
+                    for (int i = 0; i < qualityGroup.getChildCount(); i++) {
+                        View child = qualityGroup.getChildAt(i);
+                        if (child instanceof RadioButton) {
+                            RadioButton rb = (RadioButton) child;
+                            android.support.v4.widget.CompoundButtonCompat.setButtonTintList(rb, colorList);
+                            if (rb.getId() == savedId) {
+                                rb.setChecked(true);
+                            }
+                        }
+                    }
+
+                    // --- LISTENERS ---
+                    qualityGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                                // Save choice, but DO NOT dismiss (so user can toggle the switch)
+                                prefs.edit().putInt("selected_timer_id", checkedId).apply();
+                            }
+                        });
+
+                    // Handle the Switch
+                    android.support.v7.widget.SwitchCompat finishTrackSwitch = (android.support.v7.widget.SwitchCompat) dialogView.findViewById(R.id.switch_animations);
+                    finishTrackSwitch.setChecked(prefs.getBoolean("finish_track", false));
+                    finishTrackSwitch.setOnCheckedChangeListener(new android.widget.CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(android.widget.CompoundButton buttonView, boolean isChecked) {
+                                prefs.edit().putBoolean("finish_track", isChecked).apply();
+                            }
+                        });
+
+                    TextView btnCancel = (TextView) dialogView.findViewById(R.id.btn_cancel_timer);
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    TextView btnOK = (TextView) dialogView.findViewById(R.id.btn_ok);
+                    btnOK.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                }
+            });
+        
+        
+        
         SwitchCompat simplaybackSwitch = (SwitchCompat) view.findViewById(R.id.switch_simplayback);
         simplaybackSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				@Override

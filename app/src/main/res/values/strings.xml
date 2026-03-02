@@ -19,4 +19,6 @@
     <string name="opQuality">"Note: Songs that can't be played at the quality you select will automatically be played at the next available quality."</string>
     
 	<string name="downloadqualitySubtext">1.Hi-res songs and Super-quality(HQ) \nsongs can only be downloaded by Music members. \n2.Without the required membership, \nauto-downloaded Hi-Res/SQ songs will \ndefault to a lower quality.</string>
+    
+    <string name="timersubText">When the timer ends, Music will finish the current track before closing.</string>
 </resources>
