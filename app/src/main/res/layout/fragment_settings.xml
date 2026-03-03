@@ -9,9 +9,18 @@
 	tools:context="com.hyperion.musicx.SettingsFragment"
 	android:id="@+id/settingsFrag">
 
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbarsettings"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@android:color/transparent"
+		app:elevation="0dp"
+		app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
 	<android.support.v4.widget.NestedScrollView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:layout_below="@id/toolbarsettings">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -98,6 +107,7 @@
 					android:textColor="#FFFFFF"/>
 
 				<TextView
+					android:id="@+id/download_quality_setting"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
@@ -142,6 +152,7 @@
 					android:id="@+id/fragmentsettingsTextView1"/>
 
 				<TextView
+					android:id="@+id/timerSet"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
@@ -246,7 +257,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:text="&#187;"
+					android:text="»"
 					android:textColor="#808080"/>
 
 			</RelativeLayout>
@@ -270,7 +281,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:text="&#187;"
+					android:text="»"
 					android:textColor="#808080"/>
 
 			</RelativeLayout>
@@ -293,7 +304,7 @@
 				android:textSize="12sp"
 				android:paddingLeft="12dp"
 				android:paddingBottom="12dp"/>
-			
+
 			<android.support.v7.widget.SwitchCompat
 				android:id="@+id/switch_content_restrictions"
 				android:layout_width="match_parent"
@@ -312,7 +323,7 @@
 				android:textSize="12sp"
 				android:paddingLeft="12dp"
 				android:paddingBottom="12dp"/>
-			
+
 			<RelativeLayout
 				android:id="@+id/row_cache"
 				android:layout_width="match_parent"
@@ -332,11 +343,11 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:text="&#187;"
+					android:text="»"
 					android:textColor="#808080"/>
 
 			</RelativeLayout>
-			
+
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -366,11 +377,11 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:text="&#187;"
+					android:text="»"
 					android:textColor="#808080"/>
 
 			</RelativeLayout>
-			
+
 			<RelativeLayout
 				android:id="@+id/row_updates"
 				android:layout_width="match_parent"
@@ -390,11 +401,11 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:text="&#187;"
+					android:text="»"
 					android:textColor="#808080"/>
 
 			</RelativeLayout>
-			
+
 			<RelativeLayout
 				android:id="@+id/row_about"
 				android:layout_width="match_parent"
@@ -414,7 +425,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:text="&#187;"
+					android:text="»"
 					android:textColor="#808080"/>
 
 			</RelativeLayout>

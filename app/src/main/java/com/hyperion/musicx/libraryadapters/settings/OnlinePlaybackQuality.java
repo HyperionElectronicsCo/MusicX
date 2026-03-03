@@ -3,9 +3,13 @@ package com.hyperion.musicx.libraryadapters.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.BackgroundColorSpan;
@@ -37,22 +41,45 @@ public class OnlinePlaybackQuality extends Fragment {
         View view = inflater.inflate(R.layout.onlineplaybackquality, container, false);
         prefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
+        // --- TRANSPARENT TOOLBAR WITH WHITE HEADING & WHITE ARROW ---
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarquality);
+        if (toolbar != null) {
+            toolbar.setTitle("Online playback quality");
+            toolbar.setTitleTextColor(Color.WHITE); 
+            toolbar.setBackgroundColor(Color.TRANSPARENT);
+
+            // Get the back icon and tint it WHITE
+            Drawable backArrow = AppCompatResources.getDrawable(getContext(), R.drawable.abc_ic_ab_back_material);
+            if (backArrow != null) {
+                backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                toolbar.setNavigationIcon(backArrow);
+            }
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (getFragmentManager() != null) {
+                            getFragmentManager().popBackStack();
+                        } else if (getActivity() != null) {
+                            getActivity().onBackPressed();
+                        }
+                    }
+                });
+        }
+
         mobileButtons.clear();
         wifiButtons.clear();
 
-        // Setup Mobile Data Rows
         setupRow(view, R.id.tv_m_super, R.id.rb_m_super, "SQ", "#FF0000", mobileButtons, KEY_MOBILE_QUALITY);
         setupRow(view, R.id.tv_m_high, R.id.rb_m_high, "HQ", "#444444", mobileButtons, KEY_MOBILE_QUALITY);
         setupRow(view, R.id.tv_m_std, R.id.rb_m_std, "128K", "#444444", mobileButtons, KEY_MOBILE_QUALITY);
         setupRow(view, R.id.tv_m_low, R.id.rb_m_low, "64K", "#444444", mobileButtons, KEY_MOBILE_QUALITY);
 
-        // Setup WI-FI Rows
         setupRow(view, R.id.tv_w_super, R.id.rb_w_super, "SQ", "#FF0000", wifiButtons, KEY_WIFI_QUALITY);
         setupRow(view, R.id.tv_w_high, R.id.rb_w_high, "HQ", "#444444", wifiButtons, KEY_WIFI_QUALITY);
         setupRow(view, R.id.tv_w_std, R.id.rb_w_std, "128K", "#444444", wifiButtons, KEY_WIFI_QUALITY);
         setupRow(view, R.id.tv_w_low, R.id.rb_w_low, "64K", "#444444", wifiButtons, KEY_WIFI_QUALITY);
 
-        // Apply Saved Selections or Defaults (High Quality by default)
         restoreSelection(mobileButtons, KEY_MOBILE_QUALITY, R.id.rb_m_high);
         restoreSelection(wifiButtons, KEY_WIFI_QUALITY, R.id.rb_w_high);
 
@@ -60,16 +87,13 @@ public class OnlinePlaybackQuality extends Fragment {
     }
 
     private void setupRow(View parent, int tvId, final int rbId, String badge, String color, final List<RadioButton> group, final String prefKey) {
-        TextView tv = parent.findViewById(tvId);
-        final RadioButton rb = parent.findViewById(rbId);
+        TextView tv = (TextView) parent.findViewById(tvId);
+        final RadioButton rb = (RadioButton) parent.findViewById(rbId);
         if (tv == null || rb == null) return;
 
         group.add(rb);
-
-        // Apply the color selector tint (Ensure switch_track_selector.xml is in res/color/)
         rb.setButtonTintList(AppCompatResources.getColorStateList(getContext(), R.xml.switch_track_selector));
 
-        // Badge Styling
         String text = tv.getText().toString();
         SpannableString ss = new SpannableString(text);
         int start = text.indexOf(badge);
@@ -84,7 +108,6 @@ public class OnlinePlaybackQuality extends Fragment {
         }
         tv.setText(ss);
 
-        // Click Listener for mutual exclusion and persistence
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +117,6 @@ public class OnlinePlaybackQuality extends Fragment {
                 prefs.edit().putInt(prefKey, rbId).apply();
             }
         };
-
         tv.setOnClickListener(listener);
         rb.setOnClickListener(listener);
     }

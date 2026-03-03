@@ -40,9 +40,9 @@
 			android:layout_weight="10"/>
 
 		<View
-			android:background="?android:attr/dividerHorizontal"
+			android:background="#FF464646"
 			android:layout_width="1dp"
-			android:layout_height="24dp"
+			android:layout_height="20dp"
 			android:layout_marginLeft="40dp"
 			android:layout_marginRight="40dp"
 			android:layout_gravity="center_vertical"

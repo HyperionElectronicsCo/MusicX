@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
 		<service android:name=".RadioService" />
+        <service android:name=".libraryadapters.settings.TimerService" />
+        
+        
     </application>
 
 </manifest>
