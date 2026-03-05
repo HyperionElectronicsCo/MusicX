@@ -34,5 +34,18 @@
         <item name="android:editTextColor">#FFFFFF</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
     </style>
-    
+    <style name="SmallDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Set the background drawable -->
+        <item name="android:windowBackground">@drawable/dialog_bg</item>
+        <!-- Make all text white -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <!-- Style the buttons (Yes/No) -->
+        <item name="buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
+        <item name="colorAccent">#FF0000</item>
+    </style>
+    <style name="DialogButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#FF0000</item>
+    </style>
 </resources>

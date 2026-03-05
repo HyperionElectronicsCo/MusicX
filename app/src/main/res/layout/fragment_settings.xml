@@ -83,6 +83,7 @@
 					android:textColor="#FFFFFF"/>
 
 				<TextView
+                    android:id="@+id/online_quality_setting"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"

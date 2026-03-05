@@ -80,8 +80,8 @@ public class OnlinePlaybackQuality extends Fragment {
         setupRow(view, R.id.tv_w_std, R.id.rb_w_std, "128K", "#444444", wifiButtons, KEY_WIFI_QUALITY);
         setupRow(view, R.id.tv_w_low, R.id.rb_w_low, "64K", "#444444", wifiButtons, KEY_WIFI_QUALITY);
 
-        restoreSelection(mobileButtons, KEY_MOBILE_QUALITY, R.id.rb_m_high);
-        restoreSelection(wifiButtons, KEY_WIFI_QUALITY, R.id.rb_w_high);
+        restoreSelection(mobileButtons, KEY_MOBILE_QUALITY, R.id.rb_m_std);
+        restoreSelection(wifiButtons, KEY_WIFI_QUALITY, R.id.rb_w_std);
 
         return view;
     }

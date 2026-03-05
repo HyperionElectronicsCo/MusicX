@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com"
+	xmlns:tools="http://schemas.android.com"
+	android:id="@+id/aboutmain"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/mainbg"
+	tools:context="com.hyperion.musicx.libaryadapters.settings.About">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbarabout"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@android:color/transparent"
+		app:elevation="0dp"
+		app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+	<ImageButton
+		android:id="@+id/settingsTop"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:layout_alignParentRight="true"
+		android:layout_alignTop="@id/toolbarabout"
+		android:layout_alignBottom="@id/toolbarabout"
+		android:layout_marginRight="8dp"
+		android:background="?attr/selectableItemBackgroundBorderless"
+		android:src="@drawable/abc_ic_menu_overflow_material"
+		android:scaleType="centerInside"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:gravity="center_horizontal"
+		android:orientation="vertical"
+		android:layout_below="@id/toolbarabout"
+		android:layout_marginTop="64dp">
+
+		<android.support.v7.widget.CardView
+			android:id="@+id/logo_container"
+			android:layout_width="64dp"
+			android:layout_height="64dp"
+			android:layout_marginTop="64dp"
+			android:layout_centerHorizontal="true"
+			app:cardBackgroundColor="#FFFFFF"
+			app:cardCornerRadius="14dp"
+			app:cardElevation="0dp"
+			app:cardPreventCornerOverlap="false">
+
+			<ImageView
+				android:id="@+id/app_logo"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:padding="2dp"
+				android:src="@drawable/original"
+				android:scaleType="centerCrop"/>
+
+		</android.support.v7.widget.CardView>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16dp"
+			android:text="MusicX"
+			android:textColor="#FFFFFF"
+			android:textSize="18sp"
+			android:textStyle="normal"/>
+
+		<TextView
+			android:id="@+id/version_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			android:text="Version 12.11.31.361"
+			android:textColor="#80FFFFFF"
+			android:textSize="14sp"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="16dp"
+		android:gravity="center_horizontal"
+		android:orientation="vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:padding="4dp"
+			android:text="Open Source Licences"
+			android:textColor="#D32F2F"
+			android:textSize="12sp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:padding="4dp"
+			android:text="Hyperion MusicX User Agreement and Statement About\nHyperion MusicX and Privacy"
+			android:textColor="#D32F2F"
+			android:textSize="12sp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="12dp"
+			android:text="Hyperion Musicx. All rights reserved. ©2020-2026"
+			android:textColor="#50FFFFFF"
+			android:textSize="11sp"/>
+
+	</LinearLayout>
+
+</RelativeLayout>
+

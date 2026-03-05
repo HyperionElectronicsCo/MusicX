@@ -31,6 +31,7 @@ dependencies {
     // This library contains the MediaStyle class
     compile 'com.android.support:support-media-compat:25.1.0'
 	//compile 'com.google.android.gms:play-services-base:11.0.4' 
+    implementation 'com.android.support:recyclerview-v7:25.4.0'
 
     testCompile 'junit:junit:4.12' 
 }

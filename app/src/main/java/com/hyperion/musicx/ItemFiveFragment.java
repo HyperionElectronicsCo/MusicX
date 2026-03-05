@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.graphics.Color;
+import com.hyperion.musicx.libraryadapters.Songs;
 import com.hyperion.musicx.libraryadapters.SettingsFragment;
 
 public class ItemFiveFragment extends ListFragment {
@@ -63,6 +64,12 @@ public class ItemFiveFragment extends ListFragment {
         switch (position) {
             case 0: // All Songs
                 Toast.makeText(getActivity(), "Opening: " + itemValue, Toast.LENGTH_SHORT).show();
+                
+                com.hyperion.musicx.libraryadapters.Songs songsFrag = new com.hyperion.musicx.libraryadapters.Songs();
+                FragmentTransaction songstransaction = getFragmentManager().beginTransaction();
+                songstransaction.replace(R.id.frame_layout, songsFrag);
+                songstransaction.addToBackStack(null);
+                songstransaction.commit();
                 break;
             case 1: // Downloads
                 Toast.makeText(getActivity(), "Opening: " + itemValue, Toast.LENGTH_SHORT).show();
@@ -83,13 +90,13 @@ public class ItemFiveFragment extends ListFragment {
                 // Initialize the new fragment
                 SettingsFragment settingsFrag = new SettingsFragment();
                 // Start transaction using the Support FragmentManager
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                FragmentTransaction settingstransaction = getFragmentManager().beginTransaction();
                 // Replace current fragment with SettingsFragment
-                transaction.replace(R.id.frame_layout, settingsFrag);
+                settingstransaction.replace(R.id.frame_layout, settingsFrag);
                 // Add to back stack so the back button returns to this list
-                transaction.addToBackStack(null);
+                settingstransaction.addToBackStack(null);
                 // Commit the change
-                transaction.commit();
+                settingstransaction.commit();
                 break;
             default:
                 break;

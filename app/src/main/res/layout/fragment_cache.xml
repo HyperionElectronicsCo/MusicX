@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="16dp"
+	android:background="@color/mainbg">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbarcache"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@android:color/transparent"
+		app:elevation="0dp"
+		app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/rvCacheItems"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/toolbarcache"
+		android:layout_above="@+id/btnClearAll"
+		android:layout_marginTop="16dp"/>
+
+	<Button
+		android:id="@+id/btnClearAll"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="CLEAR ALL"
+		android:textColor="#FFFF0000"
+		android:paddingLeft="40dp"
+		android:paddingRight="40dp"
+		android:layout_centerHorizontal="true"
+		android:layout_alignParentBottom="true"
+		android:layout_marginBottom="10dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:background="@drawable/button_bg_rounded"/>
+
+</RelativeLayout>
+

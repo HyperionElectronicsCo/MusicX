@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.hyperion.musicx.R;
 import com.hyperion.musicx.libraryadapters.settings.About;
+import com.hyperion.musicx.libraryadapters.settings.ClearCache;
 import com.hyperion.musicx.libraryadapters.settings.OnlinePlaybackQuality;
 import android.widget.RadioGroup;
 import android.content.Intent;
@@ -116,7 +117,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getActivity(), R.style.SmallDialogTheme)
                         .setTitle("Mobile Data Warning")
                         .setMessage("Are you sure you wish to stream over mobile data?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -157,7 +158,7 @@ public class SettingsFragment extends Fragment {
 				@Override
 				public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
 					if (isChecked) {
-						new AlertDialog.Builder(getActivity())
+						new AlertDialog.Builder(getActivity(), R.style.SmallDialogTheme)
 							.setTitle("Mobile Data Warning")
 							.setMessage("Are you sure you wish to stream over mobile data?")
 							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -190,12 +191,12 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    new AlertDialog.Builder(getActivity())
+                    new AlertDialog.Builder(getActivity(), R.style.SmallDialogTheme)
                         .setTitle("Mobile Data Warning")
                         .setMessage("Are you sure you wish to download over mobile data?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                prefs.edit().putBoolean(KEY_STREAM_MOBILE, true).apply();
+                                prefs.edit().putBoolean(KEY_DOWNLOAD_MOBILE, true).apply();
                                 Toast.makeText(getActivity(), "Download using data: true", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -212,7 +213,7 @@ public class SettingsFragment extends Fragment {
 
                                 buttonView.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener)this);
 								setupStreamListener(buttonView);
-                                prefs.edit().putBoolean(KEY_STREAM_MOBILE, false).apply();
+                                prefs.edit().putBoolean(KEY_DOWNLOAD_MOBILE, false).apply();
                             }
                             private void setupStreamListener(CompoundButton bv) {
 
@@ -221,7 +222,7 @@ public class SettingsFragment extends Fragment {
                         .setCancelable(false)
                         .show();
                 } else {
-                    prefs.edit().putBoolean(KEY_STREAM_MOBILE, false).apply();
+                    prefs.edit().putBoolean(KEY_DOWNLOAD_MOBILE, false).apply();
                     Toast.makeText(getActivity(), "Download using data: false", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -231,7 +232,7 @@ public class SettingsFragment extends Fragment {
 				@Override
 				public void onCheckedChanged(final CompoundButton buttonView, boolean isChecked) {
 					if (isChecked) {
-						new AlertDialog.Builder(getActivity())
+						new AlertDialog.Builder(getActivity(), R.style.SmallDialogTheme)
 							.setTitle("Mobile Data Warning")
 							.setMessage("Are you sure you wish to download over mobile data?")
 							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -331,14 +332,14 @@ public class SettingsFragment extends Fragment {
 								public void onCheckedChanged(RadioGroup group, int checkedId) {
 									if (checkedId != -1) {
 										prefs.edit().putInt("download_quality_id", checkedId).apply();
+                                        TextView downloadTv = (TextView) getView().findViewById(R.id.download_quality_setting);
 
-										if (checkedId == R.id.rb_super) {
-											// TODO: Super quality logic
-										} else if (checkedId == R.id.rb_high) {
-											// TODO: High quality logic
-										} else if (checkedId == R.id.rb_standard) {
-											// TODO: Standard quality logic
-										}
+                                        if (downloadTv != null) {
+                                            if (checkedId == R.id.rb_super) downloadTv.setText("Super");
+                                            else if (checkedId == R.id.rb_high) downloadTv.setText("High");
+                                            else downloadTv.setText("Standard");
+                                        }
+										
 									}
 								}
 							});
@@ -733,7 +734,12 @@ public class SettingsFragment extends Fragment {
         cacheRow.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(getActivity(), "Clear cache", Toast.LENGTH_SHORT).show();
+					ClearCache cacheFragment = ClearCache.newInstance();
+                    android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+                    android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.frame_layout, cacheFragment);
+                    ft.addToBackStack(null);
+					ft.commit();
 				}
 			});
         RelativeLayout extrasRow = (RelativeLayout) view.findViewById(R.id.row_extras);
@@ -850,7 +856,33 @@ public class SettingsFragment extends Fragment {
 					}
 				});
 		}
+        
 	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateQualityText();
+    }
 
+    private void updateQualityText() {
+        // Access the same SharedPreferences file and key used in OnlinePlaybackQuality
+        SharedPreferences prefs = getActivity().getSharedPreferences("MusicX_Prefs", Context.MODE_PRIVATE);
+        int wifiQualityId = prefs.getInt("wifi_quality_id", R.id.rb_w_std); // Default to Standard
+
+        TextView qualityTv = getView().findViewById(R.id.online_quality_setting);
+
+        if (qualityTv != null) {
+            if (wifiQualityId == R.id.rb_w_super) {
+                qualityTv.setText("Super");
+            } else if (wifiQualityId == R.id.rb_w_high) {
+                qualityTv.setText("High");
+            } else if (wifiQualityId == R.id.rb_w_std) {
+                qualityTv.setText("Standard");
+            } else if (wifiQualityId == R.id.rb_w_low) {
+                qualityTv.setText("Low");
+            }
+        }
+    }
+    
 }
 

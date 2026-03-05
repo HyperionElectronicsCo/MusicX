@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com"
+	xmlns:tools="http://schemas.android.com"
+	android:id="@+id/songsmain"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/mainbg"
+	tools:context="com.hyperion.musicx.libaryadapters.settings.Songs">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarsongs"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:elevation="0dp"
+		app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    
+        <ImageButton
+            android:id="@+id/btn_refresh"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_refresh"
+            android:tint="#FFFFFF"
+            android:scaleType="centerInside"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="64dp">
+
+            <ListView
+                android:id="@+id/song_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#FF9E9E9E"
+                android:dividerHeight="1dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:cacheColorHint="#00000000"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
