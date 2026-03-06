@@ -14,18 +14,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.hyperion.musicx.R;
 import java.io.IOException;
 import java.util.ArrayList;
-import android.widget.ImageButton;
-// Added for coloring
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 import android.graphics.drawable.Drawable;
 import android.support.v7.content.res.AppCompatResources;
@@ -34,93 +28,89 @@ public class Songs extends Fragment {
 
     private static final int STORAGE_PERMISSION_CODE = 1;
     private ListView listView;
-    private ArrayList<String> songTitles = new ArrayList<>();
-    private ArrayList<String> songPaths = new ArrayList<>(); 
-    private ArrayAdapter<String> adapter;
+    private ArrayList<Song> songList = new ArrayList<>();
+    private SongAdapter adapter;
     private MediaPlayer mediaPlayer;
+
+    private View miniPlayerLayout;
+    private TextView miniTitle, miniArtist;
+    private ImageButton miniPlayPause;
+
+    class Song {
+        String title, path, artist;
+        Song(String t, String p, String a) { this.title = t; this.path = p; this.artist = a; }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_songs, container, false);
+
         listView = (ListView) view.findViewById(R.id.song_list);
         ImageButton refreshBtn = (ImageButton) view.findViewById(R.id.btn_refresh);
+        miniPlayerLayout = view.findViewById(R.id.mini_player_layout);
+        miniTitle = (TextView) view.findViewById(R.id.mini_song_title);
+        miniArtist = (TextView) view.findViewById(R.id.mini_song_artist);
+        miniPlayPause = (ImageButton) view.findViewById(R.id.mini_play_pause);
 
-        // --- MAKE REFRESH ICON WHITE ---
-        if (refreshBtn != null) {
-            refreshBtn.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-        }
-// --- TRANSPARENT TOOLBAR WITH WHITE HEADING & WHITE ARROW ---
+        if (refreshBtn != null) refreshBtn.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarsongs);
         if (toolbar != null) {
             toolbar.setTitle("Songs");
-            toolbar.setTitleTextColor(Color.WHITE); 
-            toolbar.setBackgroundColor(Color.TRANSPARENT);
-
-            // Get the back icon and tint it WHITE
+            toolbar.setTitleTextColor(Color.WHITE);
             Drawable backArrow = AppCompatResources.getDrawable(getContext(), R.drawable.abc_ic_ab_back_material);
             if (backArrow != null) {
                 backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
                 toolbar.setNavigationIcon(backArrow);
             }
-
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (getFragmentManager() != null) {
-                            getFragmentManager().popBackStack();
-                        } else if (getActivity() != null) {
-                            getActivity().onBackPressed();
-                        }
-                    }
+                    @Override public void onClick(View v) { getActivity().onBackPressed(); }
                 });
-                }
+        }
+
         mediaPlayer = new MediaPlayer();
-
-        // --- CUSTOM ADAPTER TO MAKE TEXT WHITE ---
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, songTitles) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View row = super.getView(position, convertView, parent);
-                TextView tv = (TextView) row.findViewById(android.R.id.text1);
-                tv.setTextColor(Color.WHITE); // Force text color to white
-                return row;
-            }
-        };
-
+        adapter = new SongAdapter(getActivity(), songList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    playSong(songPaths.get(position), songTitles.get(position));
+                    playSong(songList.get(position));
+                }
+            });
+
+        miniPlayPause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+                        miniPlayPause.setImageResource(android.R.drawable.ic_media_play);
+                    } else {
+                        mediaPlayer.start();
+                        miniPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                    }
                 }
             });
 
         refreshBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkPermissionAndLoad();
-                }
+                @Override public void onClick(View v) { checkPermissionAndLoad(); }
             });
 
-        if (savedInstanceState != null) {
-            songTitles.addAll(savedInstanceState.getStringArrayList("saved_titles"));
-            songPaths.addAll(savedInstanceState.getStringArrayList("saved_paths"));
-            adapter.notifyDataSetChanged();
-        } else {
-            checkPermissionAndLoad();
-        }
-
+        checkPermissionAndLoad();
         return view;
     }
 
-    private void playSong(String path, String title) {
+    private void playSong(Song song) {
         try {
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(path);
+            mediaPlayer.setDataSource(song.path);
             mediaPlayer.prepare();
             mediaPlayer.start();
-            Toast.makeText(getActivity(), "Playing: " + title, Toast.LENGTH_SHORT).show();
+
+            miniPlayerLayout.setVisibility(View.VISIBLE);
+            miniTitle.setText(song.title);
+            miniArtist.setText(song.artist);
+            miniPlayPause.setImageResource(android.R.drawable.ic_media_pause);
         } catch (IOException e) {
             Toast.makeText(getActivity(), "Error playing file", Toast.LENGTH_SHORT).show();
         }
@@ -136,61 +126,39 @@ public class Songs extends Fragment {
     }
 
     private void loadAudioFiles() {
-        songTitles.clear();
-        songPaths.clear();
+        songList.clear();
         queryStorage(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         queryStorage(MediaStore.Audio.Media.INTERNAL_CONTENT_URI);
         adapter.notifyDataSetChanged();
+    }
 
-        if(songTitles.isEmpty()){
-            Toast.makeText(getActivity(), "No audio files found", Toast.LENGTH_SHORT).show();
+    private void queryStorage(Uri uri) {
+        String[] projection = { MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ARTIST };
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                songList.add(new Song(cursor.getString(0), cursor.getString(1), cursor.getString(2)));
+            }
+            cursor.close();
         }
     }
 
-    private void queryStorage(Uri contentUri) {
-        String[] projection = { MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA };
-        String selection = MediaStore.Audio.Media.DATA + " LIKE '%.mp3' OR " +
-            MediaStore.Audio.Media.DATA + " LIKE '%.wav' OR " +
-            MediaStore.Audio.Media.DATA + " LIKE '%.flac' OR " +
-            MediaStore.Audio.Media.DATA + " LIKE '%.m4a'";
-
-        Cursor cursor = getActivity().getContentResolver().query(contentUri, projection, selection, null, null);
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                String title = cursor.getString(0);
-                String path = cursor.getString(1);
-                if (title == null || title.isEmpty()) {
-                    title = path.substring(path.lastIndexOf("/") + 1);
-                }
-                songTitles.add(title);
-                songPaths.add(path);
-            }
-            cursor.close();
+    class SongAdapter extends ArrayAdapter<Song> {
+        SongAdapter(Context context, ArrayList<Song> songs) { super(context, 0, songs); }
+        @Override
+        public View getView(int position, View v, ViewGroup p) {
+            if (v == null) v = LayoutInflater.from(getContext()).inflate(R.layout.list_item_song, p, false);
+            Song s = getItem(position);
+            ((TextView) v.findViewById(R.id.song_title)).setText(s.title);
+            ((TextView) v.findViewById(R.id.song_artist)).setText(s.artist);
+            return v;
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == STORAGE_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadAudioFiles();
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putStringArrayList("saved_titles", songTitles);
-        outState.putStringArrayList("saved_paths", songPaths);
+        if (mediaPlayer != null) mediaPlayer.release();
     }
 }
 
