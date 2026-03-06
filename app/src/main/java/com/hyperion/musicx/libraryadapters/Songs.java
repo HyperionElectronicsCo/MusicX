@@ -7,10 +7,16 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +26,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.support.v7.widget.Toolbar;
 import android.graphics.drawable.Drawable;
-import android.support.v7.content.res.AppCompatResources;
 
 public class Songs extends Fragment {
 
     private static final int STORAGE_PERMISSION_CODE = 1;
     private ListView listView;
-    private ArrayList<Song> songList = new ArrayList<>();
+    private ArrayList<Song> fullSongList = new ArrayList<Song>();
+    private ArrayList<Song> filteredList = new ArrayList<Song>();
     private SongAdapter adapter;
     private MediaPlayer mediaPlayer;
+    private int currentSongIndex = -1;
 
     private View miniPlayerLayout;
     private TextView miniTitle, miniArtist;
     private ImageButton miniPlayPause;
+    private ProgressBar songProgressBar;
+    private Handler progressHandler = new Handler();
 
     class Song {
         String title, path, artist;
@@ -47,17 +55,22 @@ public class Songs extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.song_list);
         ImageButton refreshBtn = (ImageButton) view.findViewById(R.id.btn_refresh);
+        final EditText searchBar = (EditText) view.findViewById(R.id.search_bar);
         miniPlayerLayout = view.findViewById(R.id.mini_player_layout);
         miniTitle = (TextView) view.findViewById(R.id.mini_song_title);
         miniArtist = (TextView) view.findViewById(R.id.mini_song_artist);
         miniPlayPause = (ImageButton) view.findViewById(R.id.mini_play_pause);
+        songProgressBar = (ProgressBar) view.findViewById(R.id.song_progress);
+
+        // --- SET PROGRESS BAR COLOR TO #FF0000 ---
+        if (songProgressBar != null) {
+            songProgressBar.getProgressDrawable().setColorFilter(Color.parseColor("#FF0000"), PorterDuff.Mode.SRC_IN);
+        }
 
         if (refreshBtn != null) refreshBtn.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbarsongs);
         if (toolbar != null) {
-            toolbar.setTitle("Songs");
-            toolbar.setTitleTextColor(Color.WHITE);
             Drawable backArrow = AppCompatResources.getDrawable(getContext(), R.drawable.abc_ic_ab_back_material);
             if (backArrow != null) {
                 backArrow.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
@@ -69,13 +82,32 @@ public class Songs extends Fragment {
         }
 
         mediaPlayer = new MediaPlayer();
-        adapter = new SongAdapter(getActivity(), songList);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override public void onCompletion(MediaPlayer mp) { playNextSong(); }
+            });
+
+        adapter = new SongAdapter(getActivity(), filteredList);
         listView.setAdapter(adapter);
+
+        // --- CURSOR LOGIC ---
+        searchBar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    searchBar.setCursorVisible(true);
+                }
+            });
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) { filter(s.toString()); }
+                @Override public void afterTextChanged(Editable s) {}
+            });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    playSong(songList.get(position));
+                    currentSongIndex = position;
+                    playSong(filteredList.get(position));
                 }
             });
 
@@ -88,6 +120,7 @@ public class Songs extends Fragment {
                     } else {
                         mediaPlayer.start();
                         miniPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+                        updateProgressBar();
                     }
                 }
             });
@@ -100,19 +133,51 @@ public class Songs extends Fragment {
         return view;
     }
 
+    private void filter(String text) {
+        filteredList.clear();
+        if (text.isEmpty()) {
+            filteredList.addAll(fullSongList);
+        } else {
+            for (Song song : fullSongList) {
+                if (song.title.toLowerCase().contains(text.toLowerCase()) || 
+                    song.artist.toLowerCase().contains(text.toLowerCase())) {
+                    filteredList.add(song);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
     private void playSong(Song song) {
         try {
             mediaPlayer.reset();
             mediaPlayer.setDataSource(song.path);
             mediaPlayer.prepare();
             mediaPlayer.start();
-
             miniPlayerLayout.setVisibility(View.VISIBLE);
             miniTitle.setText(song.title);
             miniArtist.setText(song.artist);
             miniPlayPause.setImageResource(android.R.drawable.ic_media_pause);
+            songProgressBar.setMax(mediaPlayer.getDuration());
+            updateProgressBar();
         } catch (IOException e) {
             Toast.makeText(getActivity(), "Error playing file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void playNextSong() {
+        if (currentSongIndex < filteredList.size() - 1) {
+            currentSongIndex++;
+            playSong(filteredList.get(currentSongIndex));
+        }
+    }
+
+    private void updateProgressBar() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            songProgressBar.setProgress(mediaPlayer.getCurrentPosition());
+            progressHandler.postDelayed(new Runnable() {
+                    @Override public void run() { updateProgressBar(); }
+                }, 1000);
         }
     }
 
@@ -126,18 +191,18 @@ public class Songs extends Fragment {
     }
 
     private void loadAudioFiles() {
-        songList.clear();
+        fullSongList.clear();
         queryStorage(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
         queryStorage(MediaStore.Audio.Media.INTERNAL_CONTENT_URI);
-        adapter.notifyDataSetChanged();
+        filter(""); 
     }
 
     private void queryStorage(Uri uri) {
-        String[] projection = { MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ARTIST };
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        String[] proj = { MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ARTIST };
+        Cursor cursor = getActivity().getContentResolver().query(uri, proj, null, null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                songList.add(new Song(cursor.getString(0), cursor.getString(1), cursor.getString(2)));
+                fullSongList.add(new Song(cursor.getString(0), cursor.getString(1), cursor.getString(2)));
             }
             cursor.close();
         }
