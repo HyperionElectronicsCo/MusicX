@@ -4,13 +4,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.content.res.AppCompatResources;
@@ -20,13 +21,20 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.hyperion.musicx.R;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
+import java.util.Locale;
 
 public class Songs extends Fragment {
 
@@ -39,9 +47,9 @@ public class Songs extends Fragment {
     private int currentSongIndex = -1;
 
     private View miniPlayerLayout;
-    private TextView miniTitle, miniArtist;
+    private TextView miniTitle, miniArtist, tvCurrentTime, tvTotalDuration;
     private ImageButton miniPlayPause;
-    private ProgressBar songProgressBar;
+    private SeekBar songProgressBar;
     private Handler progressHandler = new Handler();
 
     class Song {
@@ -59,12 +67,29 @@ public class Songs extends Fragment {
         miniPlayerLayout = view.findViewById(R.id.mini_player_layout);
         miniTitle = (TextView) view.findViewById(R.id.mini_song_title);
         miniArtist = (TextView) view.findViewById(R.id.mini_song_artist);
+        tvCurrentTime = (TextView) view.findViewById(R.id.tv_current_time);
+        tvTotalDuration = (TextView) view.findViewById(R.id.tv_total_duration);
         miniPlayPause = (ImageButton) view.findViewById(R.id.mini_play_pause);
-        songProgressBar = (ProgressBar) view.findViewById(R.id.song_progress);
+        songProgressBar = (SeekBar) view.findViewById(R.id.song_progress);
 
-        // --- SET PROGRESS BAR COLOR TO #FF0000 ---
+        // --- SEEKBAR STYLING & LOGIC ---
         if (songProgressBar != null) {
             songProgressBar.getProgressDrawable().setColorFilter(Color.parseColor("#FF0000"), PorterDuff.Mode.SRC_IN);
+            if (songProgressBar.getThumb() != null) {
+                songProgressBar.getThumb().setColorFilter(Color.parseColor("#FF0000"), PorterDuff.Mode.SRC_IN);
+            }
+
+            songProgressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        if (fromUser && mediaPlayer != null) {
+                            mediaPlayer.seekTo(progress);
+                            tvCurrentTime.setText(formatTime(progress));
+                        }
+                    }
+                    @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+                    @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+                });
         }
 
         if (refreshBtn != null) refreshBtn.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
@@ -89,12 +114,8 @@ public class Songs extends Fragment {
         adapter = new SongAdapter(getActivity(), filteredList);
         listView.setAdapter(adapter);
 
-        // --- CURSOR LOGIC ---
         searchBar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    searchBar.setCursorVisible(true);
-                }
+                @Override public void onClick(View v) { searchBar.setCursorVisible(true); }
             });
 
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -158,7 +179,10 @@ public class Songs extends Fragment {
             miniTitle.setText(song.title);
             miniArtist.setText(song.artist);
             miniPlayPause.setImageResource(android.R.drawable.ic_media_pause);
-            songProgressBar.setMax(mediaPlayer.getDuration());
+
+            int duration = mediaPlayer.getDuration();
+            songProgressBar.setMax(duration);
+            tvTotalDuration.setText(formatTime(duration));
             updateProgressBar();
         } catch (IOException e) {
             Toast.makeText(getActivity(), "Error playing file", Toast.LENGTH_SHORT).show();
@@ -174,11 +198,19 @@ public class Songs extends Fragment {
 
     private void updateProgressBar() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            songProgressBar.setProgress(mediaPlayer.getCurrentPosition());
+            int currentPos = mediaPlayer.getCurrentPosition();
+            songProgressBar.setProgress(currentPos);
+            tvCurrentTime.setText(formatTime(currentPos));
             progressHandler.postDelayed(new Runnable() {
                     @Override public void run() { updateProgressBar(); }
                 }, 1000);
         }
+    }
+
+    private String formatTime(int millis) {
+        int seconds = (millis / 1000) % 60;
+        int minutes = (millis / (1000 * 60)) % 60;
+        return String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
     }
 
     private void checkPermissionAndLoad() {
@@ -223,7 +255,11 @@ public class Songs extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mediaPlayer != null) mediaPlayer.release();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        progressHandler.removeCallbacksAndMessages(null);
     }
 }
 
